@@ -11,7 +11,12 @@ class Game:
     def update(self):
         self.board.draw(self.win)
         self.draw_valid_moves(self.valid_moves)
+        self.draw_selection()
         pygame.display.update()
+        
+    def draw_selection(self):
+        if self.selected:
+            pygame.draw.circle(self.win, (0,255,0), (self.selected.x, self.selected.y), 50, 5)
         
     def _init(self):
         self.selected = None
@@ -31,17 +36,37 @@ class Game:
             if not result:
                 self.selected = None
                 self.select(row, col)
+                
         
-        piece = self.board.get_piece(row, col)
-        if piece != 0 and piece.color == self.turn:
-            self.selected = piece
-            self.valid_moves = self.board.get_valid_moves(piece)
+        main_piece = self.board.get_piece(row, col)
+        
+        
+        if main_piece != 0 and main_piece.color == self.turn:
+            self.selected = main_piece
+            
+            self.valid_moves = self.board.get_valid_moves(main_piece)
+            
+            if len(self.valid_moves) > 0:
+                max_skip = len(list(self.valid_moves.values())[0])
+                print("reduce")  
+                for piece in self.board.get_all_pieces(main_piece.color):
+                    if self.valid_moves == {}:
+                        break
+                    if (piece.row, piece.col) != (main_piece.row, main_piece.col):
+                        valid_moves = self.board.get_valid_moves(piece)
+                        for move, skip in valid_moves.items():
+                            if len(skip) > max_skip:
+                                self.valid_moves = {}
+                                break
+            
             return True
         
         return False
     
     def _move(self, row, col):
         piece = self.board.get_piece(row, col)
+        if piece == self.selected:
+            piece = 0
         if self.selected and piece == 0 and (row, col) in self.valid_moves:
             self.board.move(self.selected, row, col)
             skipped = self.valid_moves[(row,col)]
@@ -65,4 +90,10 @@ class Game:
         else:
             self.turn = WHITE
             
+    def get_board(self):
+        return self.board
+      
+    def ai_move(self, board):
+        self.board = board  
+        self.change_turn()    
     
