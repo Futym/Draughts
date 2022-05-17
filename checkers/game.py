@@ -25,7 +25,7 @@ class Game:
         self.valid_moves = {}
         
     def winner(self):
-        self.board.winner()
+        return(self.board.winner())
     
     def reset(self):
         self._init()

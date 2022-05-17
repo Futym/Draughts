@@ -9,6 +9,8 @@ class Board:
         self.board = []
         self.black_left = self.white_left = 8
         self.black_queens = self.white_queens = 0
+        self.black_queen_moves = 0
+        self.white_queen_moves = 0
         self.create_board()
         
     def draw_squares(self, win):
@@ -37,7 +39,7 @@ class Board:
                         else:
                             opponents_rating += zone * 1  
         # print("Type your message here, you will see it in the log window\n");
-        return opponents_rating - my_rating
+        return my_rating - opponents_rating
     
     def check_zone(self, size, field):
         y, x = field
@@ -90,8 +92,7 @@ class Board:
         if self.white_left == 0:
             return BLACK
         elif self.black_left == 0:
-            return WHITE
-        
+            return WHITE        
         return None
     
     def create_board(self):

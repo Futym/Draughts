@@ -26,6 +26,10 @@ class Piece:
     def draw(self, win):
         radius = SQUARE_SIZE // 2 - self.PADDING
         pygame.draw.circle(win, self.color, (self.x, self.y), radius)
+        if self.color == WHITE:
+            pygame.draw.circle(win, (0,0,0), (self.x, self.y), 25, 1)
+        else:
+            pygame.draw.circle(win, (255, 255, 255), (self.x, self.y), 25, 1)
         if self.queen:
             win.blit(CROWN, (self.x - CROWN.get_width() // 2,self.y - SQUARE_SIZE // 2))
     

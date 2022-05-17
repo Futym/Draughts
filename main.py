@@ -26,18 +26,22 @@ def main():
     while run:
         clock.tick(FPS)
         
-        # if game.turn == BLACK:
-        #     value, new_board = minimax(game.get_board(), 5, True, game)
-        #     game.ai_move(new_board)
+        if game.turn == BLACK and game.board.white_left!=0:
+            value, new_board = minimax(game.get_board(), 3, False, game)
+            game.ai_move(new_board)
             
-        # if game.turn == WHITE:
-        #     value, new_board = minimax(game.get_board(), 3, WHITE, game)
-        #     game.ai_move(new_board)
+        if game.turn == WHITE and game.board.white_left!=0:
+            value, new_board = minimax(game.get_board(), 4, True, game)
+            game.ai_move(new_board)
         
     
             
         if game.winner() != None:
-            print(game.winner())
+            color = game.winner()
+            if color == WHITE:
+                print("White win")
+            else:
+                print("Black win")
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
