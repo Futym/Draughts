@@ -39,17 +39,18 @@ class Board:
                         else:
                             opponents_rating += zone * 1  
         # print("Type your message here, you will see it in the log window\n");
-        return my_rating - opponents_rating
+        return (my_rating - opponents_rating)
+        # return self.white_left-self.black_left+self.white_queens*0.5-self.black_queens*0.5
     
     def check_zone(self, size, field):
         y, x = field
         zone = 1
         
         if y > 0 and x > 0 and y < size - 1 and x < size - 1:
-            zone = 2
+            zone = 1
         
         if y > 1 and x > 1 and y < size - 2 and x < size - 2:
-            zone = 3
+            zone = 1
         
         return zone
     

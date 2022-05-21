@@ -21,6 +21,7 @@ class Game:
     def _init(self):
         self.selected = None
         self.board = Board()
+        self.turn_number = 0
         self.turn = WHITE
         self.valid_moves = {}
         
@@ -58,7 +59,11 @@ class Game:
                             if len(skip) > max_skip:
                                 self.valid_moves = {}
                                 break
-            
+            if main_piece.queen:
+                if piece.color == BLACK:
+                    self.board.black_queen_moves += 1
+                else:
+                    self.board.white_queen_moves += 1
             return True
         
         return False
@@ -95,5 +100,18 @@ class Game:
       
     def ai_move(self, board):
         self.board = board  
-        self.change_turn()    
+        self.change_turn()
+        
+    def draw_endgame(self, color):
+        pygame.font.init()
+        pygame.draw.rect(self.win,WHITE,(2*SQUARE_SIZE, 3*SQUARE_SIZE, SQUARE_SIZE*4, SQUARE_SIZE*2))
+        my_font = pygame.font.SysFont('Comic Sans MS', 30)
+        if(color == WHITE):
+            winner = "White wins"
+        elif color == BLACK:
+            winner == "Black wins"
+        else:
+            winner = "Draw"
+        text_surface = my_font.render(winner, False, (0, 0, 0))
+        self.win.blit(text_surface, (2*SQUARE_SIZE+SQUARE_SIZE, 3*SQUARE_SIZE+SQUARE_SIZE*3/4))
     

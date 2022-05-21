@@ -25,36 +25,54 @@ def main():
     
     while run:
         clock.tick(FPS)
-        
-        if game.turn == BLACK and game.board.white_left!=0:
-            value, new_board = minimax(game.get_board(), 3, False, game)
-            game.ai_move(new_board)
-            
-        if game.turn == WHITE and game.board.white_left!=0:
-            value, new_board = minimax(game.get_board(), 4, True, game)
-            game.ai_move(new_board)
-        
-    
-            
-        if game.winner() != None:
-            color = game.winner()
-            if color == WHITE:
-                print("White win")
-            else:
-                print("Black win")
-        
         for event in pygame.event.get():
+                
+            if  event.type == pygame.MOUSEBUTTONDOWN:
+                            
+                if game.turn == WHITE and game.board.white_left!=0:
+                    value, new_board = minimax(game.get_board(), 3, True, game, alpha = float('-inf'), beta = float('inf'))
+                    game.ai_move(new_board)
+                    
+                elif game.turn == BLACK and game.board.white_left!=0:
+                    _, new_board = minimax(game.get_board(), 3, False, game, alpha = float('-inf'), beta = float('inf'))
+                    game.ai_move(new_board)
+                    game.turn_number += 1
+
+                if game.winner() != None or game.board.black_queen_moves == 15 or game.board.white_queen_moves == 15:
+                    color = game.winner()
+                    if color == WHITE:
+                        print("White win")
+                        game.draw_endgame(WHITE)
+                        pygame.display.update()
+                    elif color == BLACK:
+                        print("Black win")
+                        game.draw_endgame(BLACK)
+                        pygame.display.update()
+                    else:
+                        print("Draw")
+                        game.draw_endgame(None)
+                        pygame.display.update()
+                    while run:
+                        for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                run = False
+                                
+                        
+                
             if event.type == pygame.QUIT:
                 run = False
+                
+                
+        for event in pygame.event.get():
                 
             if  event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 row, col = get_row_col_from_mouse(pos)
                 game.select(row, col)
-            
+        
         game.update()
         pygame.display.update()
-
+        
     pygame.quit()
     
 main()
