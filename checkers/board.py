@@ -11,7 +11,15 @@ class Board:
         self.black_queens = self.white_queens = 0
         self.black_queen_moves = 0
         self.white_queen_moves = 0
+        self.turn = WHITE
         self.create_board()
+        
+    def change_turn(self):
+        self.valid_moves = {}
+        if self.turn == WHITE:
+            self.turn = BLACK
+        else:
+            self.turn = WHITE
         
     def draw_squares(self, win):
         win.fill(DARK_BROWN)
@@ -44,10 +52,10 @@ class Board:
     
     def check_zone(self, size, field):
         y, x = field
-        zone = 1
+        zone = 3
         
         if y > 0 and x > 0 and y < size - 1 and x < size - 1:
-            zone = 1
+            zone = 2
         
         if y > 1 and x > 1 and y < size - 2 and x < size - 2:
             zone = 1
